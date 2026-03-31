@@ -42,4 +42,16 @@ class Task extends Model
             self::PRIORITY_MEDIUM
         ],true);
     }
+
+    // RELACIONAMENTOS
+    public function project(){
+        // Uma tarefa PERTENCE A um projeto        
+        return $this->belongsTo(Project::class);
+    }
+
+    public function tags(){
+        // Uma tarefa TEM MUITAS tags
+        return $this->belongsToMany(Tag::class);
+    }
+
 }

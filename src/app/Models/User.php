@@ -72,4 +72,15 @@ class User extends Authenticatable
     public static function generateVerificationCode() {
         return Str::random(40);
     }
+
+    // RELACIONAMENTOS
+    public function projects(){
+        // Um usuário TEM MUITOS projetos
+        return $this->hasMany(Project::class);
+    }
+
+    public function profile(){
+        // Um usuário TEM UM perfil
+        return $this->hasOne(Profile::class);
+    }
 }

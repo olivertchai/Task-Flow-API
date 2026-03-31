@@ -13,4 +13,9 @@ class Tag extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function tasks(){
+        // Uma tag PERTENCE A MUITAS tarefas
+        return $this->belongsToMany(Task::class);
+    }
 }

@@ -27,4 +27,14 @@ class Project extends Model
         ]);
     }
     
+    // RELACIONAMENTOS
+    public function tasks(){
+        // Um projeto TEM MUITAS tarefas
+        return $this->hasMany(Task::class);
+    }
+
+    public function user(){
+        // Um projeto PERTENCE A um usuário
+        return $this->belongsTo(User::class);
+    }
 }

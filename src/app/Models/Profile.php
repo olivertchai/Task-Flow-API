@@ -17,6 +17,7 @@ class Profile extends Model
         'updated_at'
     ];
 
+    // RELACIONAMENTOS
     public function user()
     {
         return $this->belongsTo(User::class);
