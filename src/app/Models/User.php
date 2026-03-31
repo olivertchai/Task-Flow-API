@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -18,10 +19,22 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    const VERIFIED_USER = '1';
+    const UNVERIFIED_USER = '0';
+
+    const ADMIN_USER = 'true';
+    const REGULAR_USER = 'false';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'verified',
+        'verification_token',
+        'admin',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -32,6 +45,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'verification_token',
     ];
 
     /**
@@ -45,5 +59,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isVerified() {
+        return $this->verified == self::VERIFIED_USER;
+    }
+
+    public function isAdmin() {
+        return $this->admin == self::ADMIN_USER;
+    }
+
+    public static function generateVerificationCode() {
+        return Str::random(40);
     }
 }
