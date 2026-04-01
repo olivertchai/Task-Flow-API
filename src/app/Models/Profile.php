@@ -14,7 +14,6 @@ class Profile extends Model
         'phone',
         'avatar_url',
         'created_at',
-        'updated_at'
     ];
 
     // RELACIONAMENTOS

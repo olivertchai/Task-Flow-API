@@ -33,8 +33,7 @@ class User extends Authenticatable
         'verified',
         'verification_token',
         'admin',
-        'created_at',
-        'updated_at',
+        'created_at'
     ];
 
     /**

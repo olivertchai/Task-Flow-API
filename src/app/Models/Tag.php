@@ -11,7 +11,6 @@ class Tag extends Model
         'name',
         'color',
         'created_at',
-        'updated_at'
     ];
 
     public function tasks(){
