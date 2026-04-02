@@ -4,11 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
-{
-    const STATUS_PENDING = 'pending';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_COMPLETED = 'completed';
+class Project extends Model{    
     protected $fillable = [
             'id',
             'user_id',
@@ -19,13 +15,6 @@ class Project extends Model
             'created_at',
         ];
 
-    public function isAvailable() {
-        return in_array($this->status, [
-            self::STATUS_PENDING,
-            self::STATUS_IN_PROGRESS
-        ]);
-    }
-    
     // RELACIONAMENTOS
     public function tasks(){
         // Um projeto TEM MUITAS tarefas

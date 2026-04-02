@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('name');
+            $table->foreignId('project_id')->constrained('project')->onDelete('cascade');
+            $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('status', ['open', 'in_progress', 'completed'])->default('open');
-            // O deadline (prazo) como data e opcional
-            $table->date('deadline')->nullable(); 
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
+            $table->date('due_date')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('tasks');
     }
 };
