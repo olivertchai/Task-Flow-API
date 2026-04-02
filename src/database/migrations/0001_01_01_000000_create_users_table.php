@@ -19,9 +19,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('verefied')->default(User::UNVERIFIED_USER);
-            $table->string('verefication_token')->nullable();
-            $table->string('admin')->default(User::REGULAR_USER);
+            $table->enum('verified',['1','0'])->default('0');
+            $table->enum('admin',['true','false'])->default('false');
+            $table->string('verification_token')->nullable();
             $table->timestamps();
         });
 
