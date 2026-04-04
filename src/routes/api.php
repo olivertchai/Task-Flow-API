@@ -8,6 +8,8 @@ use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Project\ProjectController;
 
+// Quando alguém acessar /users com o verbo GET, chame o método index do UserController
+Route::get('/users', [UserController::class, 'index']);
 
 /*
 Route::get('/user', function (Request $request) {

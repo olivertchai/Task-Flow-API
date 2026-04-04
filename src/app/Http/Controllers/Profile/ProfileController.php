@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profile ;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -12,7 +13,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
+        $profile = Profile::with('user')->get();
+        return response()->json(['data' => $profile], 200);
     }
 
     /**

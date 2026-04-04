@@ -27,6 +27,7 @@ class User extends Authenticatable
     const REGULAR_USER = 'false';
 
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
@@ -35,6 +36,11 @@ class User extends Authenticatable
         'verification_token',
         'created_at'
     ];
+
+    public static function generateVerificationToken()
+    {
+        return str()->random(40); // Gera um token aleatório de 40 caracteres
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,6 +63,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            // Adicionando os casts conforme pede o Módulo 4.6
+            'verified' => 'boolean',
+            'admin' => 'boolean',
         ];
     }
 
