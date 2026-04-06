@@ -54,7 +54,23 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+//        dd($request->all());
+        $rules = [
+            'description' => 'string|max:255',
+            'avatar' => 'string|max:255',
+            'phone' => 'string|max:20',
+            'avatar_url' => 'string|max:255',
+        ];
+
+        $request->validate($rules);
+
+        $profile = Profile::find($id);
+
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found'], 404);
+        }
+        $profile->update($request->all());
+        return response()->json(['data' => $profile], 200);
     }
 
     /**
