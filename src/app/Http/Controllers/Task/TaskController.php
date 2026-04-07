@@ -107,4 +107,43 @@ class TaskController extends Controller
         $task->delete();
         return response()->json(['message' => 'Task deleted successfully'], 200);
     }
+
+
+    /**
+     * Attach a tag to a task.
+     * POST /api/tasks/{taskId}/tags/{tagId}
+     */
+    public function attachTag($taskId, $tagId)
+    {
+        // 1. Acha a tarefa pelo ID direto (não importa o projeto)
+        $task = Task::find($taskId);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        // 2. Adiciona a ligação na tabela pivô
+        $task->tags()->attach($tagId);
+
+        return response()->json(['message' => 'Tag attached to task successfully'], 200);
+    }
+
+/**
+     * Remove apenas a associação entre uma Tarefa e uma Tag.
+     * DELETE /api/tasks/{taskId}/tags/{tagId}
+     */
+    public function detachTag($taskId, $tagId)
+    {
+        // 1. Acha a tarefa pelo ID direto (não importa o projeto)
+        $task = Task::find($taskId);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        // 2. Remove apenas a ligação na tabela pivô
+        $task->tags()->detach($tagId);
+
+        return response()->json(['message' => 'Tag removed from task successfully'], 200);
+    }
 }

@@ -11,9 +11,9 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($userId)
     {
-        $profile = Profile::with('user')->get();
+        $profile = Profile::where('user_id', $userId)->get();
         return response()->json(['data' => $profile], 200);
     }
 
@@ -30,15 +30,31 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'user_id' => 'required|exists:users,id',
+            'description' => 'string|max:255',
+            'avatar' => 'string|max:255',
+            'phone' => 'string|max:20',
+            'avatar_url' => 'string|max:255',
+        ];
+
+        $request->validate($rules);
+
+        $data = $request->all();
+        $profile = Profile::create($data);
+        return response()->json(['data' => $profile], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($projectId, $taskId)
     {
-        //
+        $profile = Profile::where('user_id', $projectId)->where('id', $taskId)->first();
+        if (!$profile) {
+            return response()->json(['message' => 'Profile not found for this user'], 404);
+        }
+        return response()->json(['data' => $profile], 200);
     }
 
     /**
