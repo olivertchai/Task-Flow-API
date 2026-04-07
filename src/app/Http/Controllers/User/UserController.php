@@ -17,13 +17,13 @@ class UserController extends Controller
         return response()->json(['data' => $user], 200);
     }
 
-    // /**
-    //  * Show the form for creating a new resource.
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -111,7 +111,8 @@ class UserController extends Controller
             return response()->json(['message' => 'At least one different value must be specified to update'], 422);
         }
 
-        $user->save();
+        $user->update($request->all());
+
 
         return response()->json(['data' => $user], 200);
     }

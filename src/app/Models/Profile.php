@@ -11,13 +11,11 @@ class Profile extends Model
     /** @use HasFactory<UserFactory> */
     use HasFactory;
     protected $fillable = [
-        'id',
         'user_id',
         'description',
         'avatar',
         'phone',
         'avatar_url',
-        'created_at',
     ];
 
     // RELACIONAMENTOS

@@ -11,10 +11,8 @@ class Tag extends Model
     /** @use HasFactory<UserFactory> */
     use HasFactory;
     protected $fillable = [
-        'id',
         'name',
         'color',
-        'created_at',
     ];
 
     public function tasks(){

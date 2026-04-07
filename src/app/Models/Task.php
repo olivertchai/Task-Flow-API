@@ -10,14 +10,12 @@ class Task extends Model{
     use HasFactory;
     
     protected $fillable = [
-        'id',
         'project_id',
         'title',
         'description',
         'status',
         'priority',
         'due_date',
-        'created_at',
     ];
 
     protected $casts = [

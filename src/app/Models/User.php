@@ -27,14 +27,12 @@ class User extends Authenticatable
     const REGULAR_USER = 'false';
 
     protected $fillable = [
-        'id',
         'name',
         'email',
         'password',
         'verified',
         'admin',
         'verification_token',
-        'created_at'
     ];
 
     public static function generateVerificationToken()
