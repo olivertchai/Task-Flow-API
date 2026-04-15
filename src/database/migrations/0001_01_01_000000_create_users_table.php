@@ -21,7 +21,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->enum('verified',['1','0'])->default('0');
             $table->enum('admin',['true','false'])->default('false');
-            $table->string('verification_token')->nullable();
             $table->timestamps();
         });
 

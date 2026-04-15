@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserValidateRequest;
 
 class UserController extends Controller
 {
@@ -28,22 +29,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserValidateRequest $request)
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ];
-
         // Usando o validate direto do Request!
-        $request->validate($rules);
-
-        $data = $request->all();
-        $data['password'] = bcrypt($request->password);
-        $data['verified'] = User::UNVERIFIED_USER;
-        $data['verification_token'] = User::generateVerificationToken();
-        $data['admin'] = User::REGULAR_USER;
+        $data = $request->validated();
 
         $user = User::create($data);
         

@@ -2,27 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens; // Essencial para o middleware auth:sanctum
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-
+    // Constantes para manter o código limpo
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
-
     const ADMIN_USER = 'true';
     const REGULAR_USER = 'false';
 
@@ -32,41 +23,24 @@ class User extends Authenticatable
         'password',
         'verified',
         'admin',
-        'verification_token',
     ];
 
-    public static function generateVerificationToken()
-    {
-        return str()->random(40); // Gera um token aleatório de 40 caracteres
-    }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
-        'verification_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            // Adicionando os casts conforme pede o Módulo 4.6
             'verified' => 'boolean',
             'admin' => 'boolean',
         ];
     }
 
+    // Métodos de ajuda (Helpers)
     public function isVerified() {
         return $this->verified == self::VERIFIED_USER;
     }
@@ -75,18 +49,12 @@ class User extends Authenticatable
         return $this->admin == self::ADMIN_USER;
     }
 
-    public static function generateVerificationCode() {
-        return Str::random(40);
-    }
-
     // RELACIONAMENTOS
     public function projects(){
-        // Um usuário TEM MUITOS projetos
         return $this->hasMany(Project::class);
     }
 
     public function profile(){
-        // Um usuário TEM UM perfil
         return $this->hasOne(Profile::class);
     }
 }

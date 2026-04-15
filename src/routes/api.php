@@ -7,20 +7,39 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Project\ProjectController;
+use App\Http\Controllers\AuthController;
 
-// Quando alguém acessar /users com o verbo GET, chame o método index do UserController
-Route::get('/users', [UserController::class, 'index']);
+/**
+ * AuthController 
+ */
 
-/*
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-*/
+// Rotas PÚBLICAS (Qualquer um acessa sem token)
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+// Rotas PROTEGIDAS (O "Segurança" bloqueia quem não tem o Token)
+Route::middleware('auth:sanctum')->group(function() {
+    // Suas rotas de Tasks que arrumamos antes ficam todas aqui dentro!
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::post('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'attachTag']);
+    Route::delete('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'detachTag']);
+
+    // Rotas Protegidas Tag
+    Route::get('/tags', [TagController::class, 'index']);
+    Route::post('/tags', [TagController::class, 'store']);
+
+    // Logout
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 /**
  * User
  */
-Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+Route::resource('users', UserController::class, ['except' => [ 'edit']]);
 
 /**
  * Profile 
