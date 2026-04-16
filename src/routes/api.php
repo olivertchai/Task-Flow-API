@@ -7,62 +7,40 @@ use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Project\ProjectController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthController; // Ajustado o namespace se você moveu para a pasta Auth
 
-/**
- * AuthController 
- */
-
-// Rotas PÚBLICAS (Qualquer um acessa sem token)
+// -----------------------------------------------------------------------------
+// ROTAS PÚBLICAS (Qualquer um acessa sem token)
+// -----------------------------------------------------------------------------
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-// Rotas PROTEGIDAS (O "Segurança" bloqueia quem não tem o Token)
-Route::middleware('auth:sanctum')->group(function() {
-    // Suas rotas de Tasks que arrumamos antes ficam todas aqui dentro!
-    Route::get('/tasks', [TaskController::class, 'index']);
-    Route::post('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'attachTag']);
-    Route::delete('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'detachTag']);
+Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
+Route::resource('profiles', ProfileController::class, ['only' => ['index', 'update']]);
+Route::resource('projects', ProjectController::class);
+Route::resource('projects.tasks', TaskController::class);
 
-    // Rotas Protegidas Tag
+// -----------------------------------------------------------------------------
+// ROTAS PROTEGIDAS (O "Segurança" bloqueia quem não tem o Token)
+// -----------------------------------------------------------------------------
+Route::middleware('auth:sanctum')->group(function() {
+    
+    // Rota de usuário logado
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Rotas de Tags (Corrigido para usar o TagController e removido o Route::resource solto lá de baixo)
     Route::get('/tags', [TagController::class, 'index']);
     Route::post('/tags', [TagController::class, 'store']);
+
+    // Rotas de Tasks (Isoladas)
+    Route::get('/tasks', [TaskController::class, 'index']);
+
+    // Rotas de Relacionamento Task <-> Tag (Removida a duplicata do final do arquivo)
+    Route::post('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'attachTag']);
+    Route::delete('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'detachTag']);
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-
-/**
- * User
- */
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
-Route::resource('users', UserController::class, ['except' => [ 'edit']]);
-
-/**
- * Profile 
- */
-Route::resource('profiles', ProfileController::class, ['only' => ['index', 'update']]);
-
-/**
- * Tag
- */
-Route::resource('tags', TagController::class, ['only' => ['index', 'store']]);
-
-/**
- * Task
- */
-Route::resource('projects.tasks', TaskController::class);
-
-/**
- * Project
- */
-Route::resource('projects', ProjectController::class);
-
-/**
- * Para apagar o relacionamento entre Task e Tag, já que é uma relação muitos-para-muitos, precisamos de rotas específicas para isso.
- */
-Route::post('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'attachTag']);
-Route::delete('/tasks/{taskId}/tags/{tagId}', [TaskController::class, 'detachTag']);

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         // 1. Valida se mandaram email e senha
         $request->validate([
@@ -36,7 +36,7 @@ class AuthController extends Controller
     /**
      * Efetua o logout do usuário, revogando o token atual.
      */
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         // Pega o token que foi usado nesta requisição específica e deleta ele do banco
         $request->user()->currentAccessToken()->delete();
